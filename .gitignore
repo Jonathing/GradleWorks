@@ -1,5 +1,6 @@
 *
 !.gitignore
+!.gitattributes
 !build.gradle
 !gradle.properties
 !publish.gradle
