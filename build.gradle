@@ -127,7 +127,7 @@ minecraft {
             // The directory for Minecraft to run in
             workingDirectory project.file('run')
 
-            // Enable mixins if installed
+            // Enable mixins if installed (comment out if using a MixinConnector)
             if (project.hasProperty('mixin_version')) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
@@ -157,7 +157,7 @@ minecraft {
             // The directory for Minecraft to run in
             workingDirectory project.file('run')
 
-            // Enable mixins if installed
+            // Enable mixins if installed (comment out if using a MixinConnector)
             if (project.hasProperty('mixin_version')) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
@@ -190,7 +190,7 @@ minecraft {
             // The directory for Minecraft to run in
             workingDirectory project.file('run')
 
-            // Enable mixins if installed
+            // Enable mixins if installed (comment out if using a MixinConnector)
             if (project.hasProperty('mixin_version')) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
