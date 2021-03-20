@@ -1,6 +1,7 @@
 *
 !.gitignore
 !.gitattributes
+!*.md
 !build.gradle
 !gradle.properties
 !publish.gradle
