@@ -15,23 +15,23 @@ import net.minecraftforge.gradle.common.util.ModConfig
 
 // Buildscript setup (DO NOT EDIT!!!)
 buildscript {
-	repositories {
-		// Minecraft Forge Maven
-		maven { url 'https://files.minecraftforge.net/maven' }
+    repositories {
+        // Minecraft Forge Maven
+        maven { url 'https://files.minecraftforge.net/maven' }
 
-		// SpongePowered Maven
-		maven { url 'https://repo.spongepowered.org/maven' }
+        // SpongePowered Maven
+        maven { url 'https://repo.spongepowered.org/maven' }
 
-		// Maven Central
-		mavenCentral()
-	}
-	dependencies {
-		// ForgeGradle
-		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        // Maven Central
+        mavenCentral()
+    }
+    dependencies {
+        // ForgeGradle
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
 
-		// SpongePowered Mixin
-		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-	}
+        // SpongePowered Mixin
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+    }
 }
 
 println('GradleWorks for ForgeGradle 4')
@@ -43,7 +43,7 @@ println('')
 apply plugin: 'net.minecraftforge.gradle'
 // MixinGradle - Adds mixin support to the development environment.
 if (project.hasProperty('mixin_version')) {
-	apply plugin: 'org.spongepowered.mixin'
+    apply plugin: 'org.spongepowered.mixin'
 }
 
 // Eclipse - Adds compatibility for Eclipse workspaces.
@@ -55,8 +55,8 @@ apply plugin: 'maven-publish'
 
 // Detects if the OS is macOS. Required for the workaround in genData.
 static def isOsx() {
-	def osProp = System.properties['os.name'].toLowerCase()
-	return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
+    def osProp = System.properties['os.name'].toLowerCase()
+    return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
 }
 
 project.ext.isOsx = { return isOsx() }
@@ -100,133 +100,133 @@ println('')
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
-	// JCenter Repository
-	jcenter()
+    // JCenter Repository
+    jcenter()
 
-	// CurseMaven
-	maven {
-		url "https://www.cursemaven.com"
-		content {
-			includeGroup "curse.maven"
-		}
-	}
+    // CurseMaven
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 // Minecraft setup
 minecraft {
-	// Mappings to use for the project. See default MDK for mappings instructions.
-	mappings channel: "${mappings_channel}".toString(), version: "${mappings_version}".toString()
+    // Mappings to use for the project. See default MDK for mappings instructions.
+    mappings channel: "${mappings_channel}".toString(), version: "${mappings_version}".toString()
 
-	// Access Transformer (commented out by default)
-	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // Access Transformer (commented out by default)
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-	// Run configurations
-	runs {
-		// Client run configuration
-		client {
-			// The directory for Minecraft to run in
-			workingDirectory project.file('run')
+    // Run configurations
+    runs {
+        // Client run configuration
+        client {
+            // The directory for Minecraft to run in
+            workingDirectory project.file('run')
 
-			// Enable mixins if installed
-			if (project.hasProperty('mixin_version')) {
-				arg "-mixin.config=${mod_id}.mixins.json".toString()
-			}
+            // Enable mixins if installed
+            if (project.hasProperty('mixin_version')) {
+                arg "-mixin.config=${mod_id}.mixins.json".toString()
+            }
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+            // Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
+            if (project.hasProperty('mixin_version')) {
+                property 'mixin.env.disableRefMap', 'true'
+            }
 
-			// Logging markers for Forge. See default MDK for instructions
-			property 'forge.logging.markers', 'REGISTRIES'
+            // Logging markers for Forge. See default MDK for instructions
+            property 'forge.logging.markers', 'REGISTRIES'
 
-			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by default, change to info if it's too much)
+            property 'forge.logging.console.level', 'debug'
 
-			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
-			property "${mod_id}.iside".toString(), 'true'
+            // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
+            property "${mod_id}.iside".toString(), 'true'
 
-			// Add the mod's main source set to the total mods in the run configuration
-			ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
-			modConfig.source(sourceSets.main)
-			mods.add(modConfig)
-		}
+            // Add the mod's main source set to the total mods in the run configuration
+            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            modConfig.source(sourceSets.main)
+            mods.add(modConfig)
+        }
 
-		// Server run configuration
-		server {
-			// The directory for Minecraft to run in
-			workingDirectory project.file('run')
+        // Server run configuration
+        server {
+            // The directory for Minecraft to run in
+            workingDirectory project.file('run')
 
-			// Enable mixins if installed
-			if (project.hasProperty('mixin_version')) {
-				arg "-mixin.config=${mod_id}.mixins.json".toString()
-			}
+            // Enable mixins if installed
+            if (project.hasProperty('mixin_version')) {
+                arg "-mixin.config=${mod_id}.mixins.json".toString()
+            }
 
-			// Additional arguments exclusive to the server (nogui by default, separated by ",")
-			args 'nogui'
+            // Additional arguments exclusive to the server (nogui by default, separated by ",")
+            args 'nogui'
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+            // Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
+            if (project.hasProperty('mixin_version')) {
+                property 'mixin.env.disableRefMap', 'true'
+            }
 
-			// Logging markers for Forge. See default MDK for instructions
-			property 'forge.logging.markers', 'REGISTRIES'
+            // Logging markers for Forge. See default MDK for instructions
+            property 'forge.logging.markers', 'REGISTRIES'
 
-			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by default, change to info if it's too much)
+            property 'forge.logging.console.level', 'debug'
 
-			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
-			property "${mod_id}.iside".toString(), 'true'
+            // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
+            property "${mod_id}.iside".toString(), 'true'
 
-			// Add the mod's main source set to the total mods in the run configuration
-			ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
-			modConfig.source(sourceSets.main)
-			mods.add(modConfig)
-		}
+            // Add the mod's main source set to the total mods in the run configuration
+            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            modConfig.source(sourceSets.main)
+            mods.add(modConfig)
+        }
 
-		// Data run configuration
-		data {
-			// The directory for Minecraft to run in
-			workingDirectory project.file('run')
+        // Data run configuration
+        data {
+            // The directory for Minecraft to run in
+            workingDirectory project.file('run')
 
-			// Enable mixins if installed
-			if (project.hasProperty('mixin_version')) {
-				arg "-mixin.config=${mod_id}.mixins.json".toString()
-			}
+            // Enable mixins if installed
+            if (project.hasProperty('mixin_version')) {
+                arg "-mixin.config=${mod_id}.mixins.json".toString()
+            }
 
-			// Additional arguments exclusive to data generation (do NOT change these unless necessary)
-			args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            // Additional arguments exclusive to data generation (do NOT change these unless necessary)
+            args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+            // Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
+            if (project.hasProperty('mixin_version')) {
+                property 'mixin.env.disableRefMap', 'true'
+            }
 
-			// Logging markers for Forge. See default MDK for instructions
-			property 'forge.logging.markers', 'REGISTRIES'
+            // Logging markers for Forge. See default MDK for instructions
+            property 'forge.logging.markers', 'REGISTRIES'
 
-			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by default, change to info if it's too much)
+            property 'forge.logging.console.level', 'debug'
 
-			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
-			property "${mod_id}.iside".toString(), 'true'
+            // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
+            property "${mod_id}.iside".toString(), 'true'
 
-			// Tells the mod if it is running datagen (must be configured in your project, but not required)
-			property "${mod_id}.datagen".toString(), 'true'
+            // Tells the mod if it is running datagen (must be configured in your project, but not required)
+            property "${mod_id}.datagen".toString(), 'true'
 
-			// Workaround for https://github.com/MinecraftForge/ForgeGradle/issues/690
-			// Written by Shadew
-			if (project.ext.isOsx()) {
-				jvmArg('-XstartOnFirstThread')
-			}
+            // Workaround for https://github.com/MinecraftForge/ForgeGradle/issues/690
+            // Written by Shadew
+            if (project.ext.isOsx()) {
+                jvmArg('-XstartOnFirstThread')
+            }
 
-			// Add the mod's main source set to the total mods in the run configuration
-			ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
-			modConfig.source(sourceSets.main)
-			mods.add(modConfig)
-		}
-	}
+            // Add the mod's main source set to the total mods in the run configuration
+            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            modConfig.source(sourceSets.main)
+            mods.add(modConfig)
+        }
+    }
 }
 
 // Include resources generated by data generators.
@@ -234,53 +234,53 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 // Ensure the reference map is included in the source sets
 if (project.hasProperty('mixin_version')) {
-	mixin {
-		add sourceSets.main, "${mod_id}.refmap.json"
-	}
+    mixin {
+        add sourceSets.main, "${mod_id}.refmap.json"
+    }
 }
 
 // Dependencies to use in this project
 dependencies {
-	// Minecraft Forge
-	minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
+    // Minecraft Forge
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
-	// Mixin processor
-	if (project.hasProperty('mixin_version')) {
-		annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
-	}
+    // Mixin processor
+    if (project.hasProperty('mixin_version')) {
+        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
+    }
 
-	// Smooth Boot (Forge)
-	if (project.hasProperty('smoothboot_version')) {
-		runtimeOnly fg.deobf("io.github.ultimateboomer:smoothboot-forge:${smoothboot_version}".toString())
-	}
+    // Smooth Boot (Forge)
+    if (project.hasProperty('smoothboot_version')) {
+        runtimeOnly fg.deobf("io.github.ultimateboomer:smoothboot-forge:${smoothboot_version}".toString())
+    }
 }
 
 // Attributes to include in the built jar file
 jar {
-	manifest {
-		if (project.hasProperty('mixin_version')) {
-			attributes([
-					"Specification-Title"     : "${mod_id}",
-					"Specification-Vendor"    : "${mod_author}",
-					"Specification-Version"   : "1",
-					"Implementation-Title"    : project.name,
-					"Implementation-Version"  : "${version}",
-					"Implementation-Vendor"   : "${mod_author}",
-					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-					"MixinConfigs"            : "${mod_id}.mixins.json"
-					// If you prefer to use a MixinConnector, feel free to do so; remember to uncomment the specified lines
-					//"MixinConnector"          : "your.package.here.MixinConnector"
-			])
-		} else {
-			attributes([
-					"Specification-Title"     : "${mod_id}",
-					"Specification-Vendor"    : "${mod_author}",
-					"Specification-Version"   : "1",
-					"Implementation-Title"    : project.name,
-					"Implementation-Version"  : "${version}",
-					"Implementation-Vendor"   : "${mod_author}",
-					"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-			])
-		}
-	}
+    manifest {
+        if (project.hasProperty('mixin_version')) {
+            attributes([
+                    "Specification-Title"     : "${mod_id}",
+                    "Specification-Vendor"    : "${mod_author}",
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs"            : "${mod_id}.mixins.json"
+                    // If you prefer to use a MixinConnector, feel free to do so; remember to uncomment the specified lines
+                    //"MixinConnector"          : "your.package.here.MixinConnector"
+            ])
+        } else {
+            attributes([
+                    "Specification-Title"     : "${mod_id}",
+                    "Specification-Vendor"    : "${mod_author}",
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ])
+        }
+    }
 }

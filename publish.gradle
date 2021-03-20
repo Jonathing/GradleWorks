@@ -9,46 +9,46 @@
 
 // shoves all of the sources in a jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set('sources')
-	from sourceSets.main.allSource
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
 }
 
 // shoves all of the sources and deobf compiled classes in a jar
 task deobfJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set('deobf')
-	from sourceSets.main.java.sourceDirectories
-	from sourceSets.main.output
+    archiveClassifier.set('deobf')
+    from sourceSets.main.java.sourceDirectories
+    from sourceSets.main.output
 }
 
 // generates the javadocs and shoves them in a jar
 task javadocJar(type: Jar) {
-	from javadoc
-	archiveClassifier.set('javadoc')
+    from javadoc
+    archiveClassifier.set('javadoc')
 }
 
 // Ensures that the mod is built before it is published to the maven
 publish {
-	dependsOn 'build'
+    dependsOn 'build'
 }
 
 publishing {
-	publications {
-		// Get the main jar, sources jar, and javadoc jars for publishing
-		mavenJava(MavenPublication) {
-			groupId = "${maven_group}"
-			artifactId = "${maven_artifact_id}"
-			version = "${mc_version}-${version}"
+    publications {
+        // Get the main jar, sources jar, and javadoc jars for publishing
+        mavenJava(MavenPublication) {
+            groupId = "${maven_group}"
+            artifactId = "${maven_artifact_id}"
+            version = "${mc_version}-${version}"
 
-			artifact reobfFile // main jar
-			artifact sourcesJar // sources jar
-			artifact javadocJar // javadoc jar
-		}
-	}
-	repositories {
-		// Test Maven repository located in the "mcmodsrepo" folder
-		maven {
-			name "TestMaven"
-			url "file:///${project.projectDir}/mcmodsrepo"
-		}
-	}
+            artifact reobfFile // main jar
+            artifact sourcesJar // sources jar
+            artifact javadocJar // javadoc jar
+        }
+    }
+    repositories {
+        // Test Maven repository located in the "mcmodsrepo" folder
+        maven {
+            name "TestMaven"
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
 }
