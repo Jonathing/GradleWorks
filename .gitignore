@@ -1,0 +1,6 @@
+*
+!.gitignore
+!build.gradle
+!gradle.properties
+!publish.gradle
+!signing.gradle
