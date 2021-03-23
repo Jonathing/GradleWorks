@@ -1,1 +1,11 @@
+/*
+ * GradleWorks for ForgeGradle 3
+ * Written by Jonathing
+ * Version 3.2.2
+ *
+ * This gradle file contains specific settings for GradleWorks that allow specific backports or preview features that
+ * were introduced in Gradle 5.0+.
+ */
+
+// Enable the stable publishing preview feature
 enableFeaturePreview('STABLE_PUBLISHING')
