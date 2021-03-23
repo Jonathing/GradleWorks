@@ -262,7 +262,7 @@ jar {
                     "Specification-Vendor"    : "${mod_author}",
                     "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${version}",
+                    "Implementation-Version"  : "${archiveVersion.getOrNull()}",
                     "Implementation-Vendor"   : "${mod_author}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                     "MixinConfigs"            : "${mod_id}.mixins.json"
@@ -275,7 +275,7 @@ jar {
                     "Specification-Vendor"    : "${mod_author}",
                     "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${version}",
+                    "Implementation-Version"  : "${archiveVersion.getOrNull()}",
                     "Implementation-Vendor"   : "${mod_author}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
