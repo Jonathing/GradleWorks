@@ -40,7 +40,9 @@ println('Version 3.2.1')
 apply plugin: 'net.minecraftforge.gradle'
 // MixinGradle - Adds mixin support to the development environment.
 if (project.hasProperty('mixin_version')) {
-    println('')
+    if (!project.extensions.findByName('eclipse')) {
+        println('')
+    }
     apply plugin: 'org.spongepowered.mixin'
 }
 
