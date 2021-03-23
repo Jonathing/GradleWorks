@@ -8,13 +8,13 @@
 
 // shoves all of the sources in a jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
 // shoves all of the sources and deobf compiled classes in a jar
 task deobfJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('deobf')
+    classifier = 'deobf'
     from sourceSets.main.java.sourceDirectories
     from sourceSets.main.output
 }
@@ -22,7 +22,7 @@ task deobfJar(type: Jar, dependsOn: classes) {
 // generates the javadocs and shoves them in a jar
 task javadocJar(type: Jar) {
     from javadoc
-    archiveClassifier.set('javadoc')
+    classifier = 'javadoc'
 }
 
 // Ensures that the mod is built before it is published to the maven

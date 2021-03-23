@@ -25,16 +25,16 @@ buildscript {
     }
     dependencies {
         // ForgeGradle
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
 
         // SpongePowered Mixin
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
-println('GradleWorks for ForgeGradle 4')
+println('GradleWorks for ForgeGradle 3')
 println('Written by Jonathing')
-println('Version 3.2.1')
+println('Version 3.2.2')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
@@ -73,7 +73,7 @@ apply from: 'signing.gradle'
 apply from: 'publish.gradle'
 
 // Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 // This section prints out the Java, Minecraft, and Mod info just to double check all the values are correct.
 // It is printed on every build, so make sure you double check!
@@ -102,9 +102,6 @@ repositories {
     // CurseMaven
     maven {
         url "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
     }
 }
 
@@ -239,11 +236,6 @@ if (project.hasProperty('mixin_version')) {
 dependencies {
     // Minecraft Forge
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
-
-    // Mixin processor
-    if (project.hasProperty('mixin_version')) {
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
-    }
 
     // Smooth Boot (Forge)
     if (project.hasProperty('smoothboot_version')) {
