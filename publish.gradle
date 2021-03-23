@@ -1,5 +1,5 @@
 /*
- * GradleWorks for ForgeGradle 3
+ * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
  * Version 3.2.2
  *
@@ -8,13 +8,21 @@
 
 // shoves all of the sources in a jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        archiveClassifier.set('sources')
+    } else {
+        classifier = 'sources'
+    }
     from sourceSets.main.allSource
 }
 
 // shoves all of the sources and deobf compiled classes in a jar
 task deobfJar(type: Jar, dependsOn: classes) {
-    classifier = 'deobf'
+    if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        archiveClassifier.set('deobf')
+    } else {
+        classifier = 'deobf'
+    }
     from sourceSets.main.java.sourceDirectories
     from sourceSets.main.output
 }
@@ -22,7 +30,11 @@ task deobfJar(type: Jar, dependsOn: classes) {
 // generates the javadocs and shoves them in a jar
 task javadocJar(type: Jar) {
     from javadoc
-    classifier = 'javadoc'
+    if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        archiveClassifier.set('javadoc')
+    } else {
+        classifier = 'javadoc'
+    }
 }
 
 // Ensures that the mod is built before it is published to the maven
@@ -34,9 +46,9 @@ publishing {
     publications {
         // Get the main jar, sources jar, and javadoc jars for publishing
         mavenJava(MavenPublication) {
-            groupId = "${maven_group}"
-            artifactId = "${maven_artifact_id}"
-            version = "${mc_version}-${version}"
+            groupId = "${maven_group}".toString()
+            artifactId = "${maven_artifact_id}".toString()
+            version = "${mc_version}-${version}".toString()
 
             artifact reobfFile // main jar
             artifact sourcesJar // sources jar
