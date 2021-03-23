@@ -3,8 +3,6 @@
  * Written by Jonathing
  * Version 3.2.0
  *
- * NOTICE: Unlike the rest of this project, AutoGradle-MC is under the GPL 2.0 license.
- *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
  * deal. Anything you'll most likely ever need to change can be found in gradle.properties. Enjoy!
@@ -37,12 +35,12 @@ buildscript {
 println('GradleWorks for ForgeGradle 4')
 println('Written by Jonathing')
 println('Version 3.2.0')
-println('')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
 // MixinGradle - Adds mixin support to the development environment.
 if (project.hasProperty('mixin_version')) {
+    println('')
     apply plugin: 'org.spongepowered.mixin'
 }
 
@@ -57,9 +55,7 @@ apply plugin: 'maven-publish'
 static def isOsx() {
     def osProp = System.properties['os.name'].toLowerCase()
     return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
-}
-
-project.ext.isOsx = { return isOsx() }
+}; project.ext.isOsx = { return isOsx() }
 
 // Get the mod version from gradle.properties
 version = "${mod_version}"

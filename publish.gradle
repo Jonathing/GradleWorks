@@ -3,8 +3,7 @@
  * Written by Jonathing
  * Version 3.2.0
  *
- * This gradle file contains additional instructions for publishing builds of this mod to the Modding Legacy Maven
- * repository.
+ * This gradle file contains additional instructions for publishing builds of this mod to maven repositories.
  */
 
 // shoves all of the sources in a jar
