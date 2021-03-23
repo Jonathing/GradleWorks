@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 4
  * Written by Jonathing
- * Version 3.2.1
+ * Version 3.2.2
  *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
@@ -34,7 +34,7 @@ buildscript {
 
 println('GradleWorks for ForgeGradle 4')
 println('Written by Jonathing')
-println('Version 3.2.1')
+println('Version 3.2.2')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'

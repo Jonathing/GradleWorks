@@ -3,7 +3,5 @@
 !.gitattributes
 !*.md
 !LICENSE
-!build.gradle
 !gradle.properties
-!publish.gradle
-!signing.gradle
+!*.gradle
