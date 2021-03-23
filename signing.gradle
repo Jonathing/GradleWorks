@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
- * Version 3.2.2
+ * Version 3.3.0
  *
  * This gradle file contains additional instructions for signing builds of this mod.
  */
@@ -37,7 +37,7 @@ def getProjectFingerprint() {
 // Signs a jar file
 def sign(File jar) {
     if (canJarBeSigned()) {
-        println "Attempting to sign jar: ${jar}"
+        println("Attempting to sign jar: ${jar}".toString())
         ant.signjar(
                 destDir: "${jar.parentFile}",
                 jar: "${jar}",
@@ -49,9 +49,9 @@ def sign(File jar) {
                 verbose: true,
                 preservelastmodified: "true"
         )
-        println "Jar signed: ${jar}"
+        println("Jar signed: ${jar}".toString())
     } else {
-        println "No keystore property found, jar will not be signed"
+        println('No keystore property found, jar will not be signed')
     }
 }
 
