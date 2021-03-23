@@ -254,8 +254,8 @@ dependencies {
     // Minecraft Forge
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
+    // Mixin processor
     if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
-        // Mixin processor
         if (project.hasProperty('mixin_version')) {
             annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
         }
