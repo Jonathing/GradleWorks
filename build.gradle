@@ -1,5 +1,5 @@
 /*
- * GradleWorks for ForgeGradle 4
+ * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
  * Version 3.2.2
  *
@@ -24,15 +24,20 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // ForgeGradle
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        // Minecraft Forge ForgeGradle
+        if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+            classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        }
+        else {
+            classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        }
 
-        // SpongePowered Mixin
+        // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
-println('GradleWorks for ForgeGradle 4')
+println('GradleWorks for ForgeGradle '.concat(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? '3' : '4'))
 println('Written by Jonathing')
 println('Version 3.2.2')
 
@@ -75,7 +80,12 @@ apply from: 'signing.gradle'
 apply from: 'publish.gradle'
 
 // Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
+else {
+    sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+}
 
 // This section prints out the Java, Minecraft, and Mod info just to double check all the values are correct.
 // It is printed on every build, so make sure you double check!
@@ -104,8 +114,10 @@ repositories {
     // CurseMaven
     maven {
         url "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
+        if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+            content {
+                includeGroup "curse.maven"
+            }
         }
     }
 }
@@ -242,9 +254,11 @@ dependencies {
     // Minecraft Forge
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
-    // Mixin processor
-    if (project.hasProperty('mixin_version')) {
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
+    if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        // Mixin processor
+        if (project.hasProperty('mixin_version')) {
+            annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
+        }
     }
 
     // Smooth Boot (Forge)
@@ -258,25 +272,25 @@ jar {
     manifest {
         if (project.hasProperty('mixin_version')) {
             attributes([
-                    "Specification-Title"     : "${mod_id}",
-                    "Specification-Vendor"    : "${mod_author}",
+                    "Specification-Title"     : "${mod_id}".toString(),
+                    "Specification-Vendor"    : "${mod_author}".toString(),
                     "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${archiveVersion.getOrNull()}",
-                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Version"  : project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? "${version}".toString() : "${archiveVersion.getOrNull()}".toString(),
+                    "Implementation-Vendor"   : "${mod_author}".toString(),
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"            : "${mod_id}.mixins.json"
+                    "MixinConfigs"            : "${mod_id}.mixins.json".toString()
                     // If you prefer to use a MixinConnector, feel free to do so; remember to uncomment the specified lines
                     //"MixinConnector"          : "your.package.here.MixinConnector"
             ])
         } else {
             attributes([
-                    "Specification-Title"     : "${mod_id}",
-                    "Specification-Vendor"    : "${mod_author}",
+                    "Specification-Title"     : "${mod_id}".toString(),
+                    "Specification-Vendor"    : "${mod_author}".toString(),
                     "Specification-Version"   : "1",
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${archiveVersion.getOrNull()}",
-                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Version"  : project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? "${version}".toString() : "${archiveVersion.getOrNull()}".toString(),
+                    "Implementation-Vendor"   : "${mod_author}".toString(),
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
