@@ -7,5 +7,9 @@
  * were introduced in Gradle 5.0+.
  */
 
+import org.gradle.util.GradleVersion
+
 // Enable the stable publishing preview feature
-enableFeaturePreview('STABLE_PUBLISHING')
+if (GradleVersion.current().getVersion().split('\\.').head().toInteger() < 5) {
+    enableFeaturePreview('STABLE_PUBLISHING')
+}
