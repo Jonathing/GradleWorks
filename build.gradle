@@ -18,7 +18,7 @@ buildscript {
         maven { url 'https://files.minecraftforge.net/maven' }
 
         // SpongePowered Maven
-        maven { url 'https://repo.spongepowered.org/maven' }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public' }
 
         // Maven Central
         mavenCentral()
@@ -27,14 +27,17 @@ buildscript {
         // Minecraft Forge ForgeGradle
         if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        }
-        else {
+        } else {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         }
 
         // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
+}
+
+ext {
+    timeOfExecution = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
 }
 
 println('GradleWorks for ForgeGradle '.concat(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? '3' : '4'))
@@ -82,8 +85,7 @@ apply from: 'publish.gradle'
 // Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
 if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-}
-else {
+} else {
     sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 }
 
