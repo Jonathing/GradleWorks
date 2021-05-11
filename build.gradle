@@ -15,7 +15,7 @@ import net.minecraftforge.gradle.common.util.ModConfig
 buildscript {
     repositories {
         // Minecraft Forge Maven
-        maven { url 'https://files.minecraftforge.net/maven' }
+        maven { url 'https://maven.minecraftforge.net' }
 
         // SpongePowered Maven
         maven { url 'https://repo.spongepowered.org/repository/maven-public' }
