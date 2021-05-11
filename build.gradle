@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
- * Version 3.3.1
+ * Version 3.3.2
  *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
@@ -42,7 +42,7 @@ ext {
 
 println('GradleWorks for ForgeGradle '.concat(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? '3' : '4'))
 println('Written by Jonathing')
-println('Version 3.3.0')
+println('Version 3.3.2')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
