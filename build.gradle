@@ -109,9 +109,6 @@ println('- Version: ' + "${version}".toString())
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
-    // JCenter Repository
-    jcenter()
-
     // CurseMaven
     maven {
         url "https://www.cursemaven.com"
@@ -144,10 +141,8 @@ minecraft {
             }
 
             // Remaps refmaps to workspace mappings for mixin
-            if (project.hasProperty('mixin_version')) {
-                property 'mixin.env.remapRefMap', 'true'
-                property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
-            }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
@@ -178,10 +173,8 @@ minecraft {
             args 'nogui'
 
             // Remaps refmaps to workspace mappings for mixin
-            if (project.hasProperty('mixin_version')) {
-                property 'mixin.env.remapRefMap', 'true'
-                property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
-            }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
@@ -212,10 +205,8 @@ minecraft {
             args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             // Remaps refmaps to workspace mappings for mixin
-            if (project.hasProperty('mixin_version')) {
-                property 'mixin.env.remapRefMap', 'true'
-                property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
-            }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
@@ -265,9 +256,9 @@ dependencies {
         }
     }
 
-    // Smooth Boot (Forge)
-    if (project.hasProperty('smoothboot_version')) {
-        runtimeOnly fg.deobf("io.github.ultimateboomer:smoothboot-forge:${smoothboot_version}".toString())
+    // Lazy DataFixerUpper(LazyDFU) [FORGE]
+    if (project.hasProperty('lazydfu_file_id')) {
+        runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
     }
 }
 
