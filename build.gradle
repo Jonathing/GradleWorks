@@ -106,7 +106,6 @@ println('Mod Information')
 println('- ID: ' + "${mod_id}".toString())
 println('- Name: ' + "${mod_name}".toString())
 println('- Version: ' + "${version}".toString())
-println()
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
