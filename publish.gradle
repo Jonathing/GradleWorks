@@ -13,7 +13,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     } else {
         classifier = 'sources'
     }
-    
+
     from sourceSets.main.allSource
 }
 
@@ -24,7 +24,7 @@ task deobfJar(type: Jar, dependsOn: classes) {
     } else {
         classifier = 'deobf'
     }
-    
+
     from sourceSets.main.java.sourceDirectories
     from sourceSets.main.output
 }

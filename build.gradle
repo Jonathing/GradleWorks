@@ -12,24 +12,24 @@ import net.minecraftforge.gradle.common.util.ModConfig
 import org.gradle.util.GradleVersion
 
 // Detects if the OS is macOS.
-static def isMacOS() {
+static boolean isMacOS() {
     def osProp = System.properties['os.name'].toLowerCase()
     return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
 }
 
 // Detects if the OS is Windows.
-static def isWindows() {
+static boolean isWindows() {
     def osProp = System.properties['os.name'].toLowerCase()
     return osProp.contains('windows')
 }
 
 // Detects if GradleWorks should use ForgeGradle 3.
-def isUsingFG3() {
+boolean isUsingFG3() {
     return project.hasProperty('use_forgegradle3') && Boolean.parseBoolean(use_forgegradle3)
 }
 
 // Detects if GradleWorks should use Mixin.
-def isUsingMixin() {
+boolean isUsingMixin() {
     return project.hasProperty('mixin_version')
 }
 
@@ -85,7 +85,7 @@ apply plugin: 'signing'
 apply plugin: 'maven-publish'
 
 // Gets a file from a parent directory and folder/file names
-def getFile(File parent, String... paths) {
+File getFile(File parent, String... paths) {
     StringBuilder builder = new StringBuilder()
     builder.append(parent)
     for (String path : paths) {
