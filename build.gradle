@@ -1,15 +1,37 @@
 /*
  * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
- * Version 3.3.2
+ * Version 3.4.0
  *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
  * deal. Anything you'll most likely ever need to change can be found in gradle.properties. Enjoy!
  */
 
-// This is here for a funny little hack with the run configs
 import net.minecraftforge.gradle.common.util.ModConfig
+import org.gradle.util.GradleVersion
+
+// Detects if the OS is macOS.
+static def isMacOS() {
+    def osProp = System.properties['os.name'].toLowerCase()
+    return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
+}
+
+// Detects if the OS is Windows.
+static def isWindows() {
+    def osProp = System.properties['os.name'].toLowerCase()
+    return osProp.contains('windows')
+}
+
+// Detects if GradleWorks should use ForgeGradle 3.
+def isUsingFG3() {
+    return project.hasProperty('use_forgegradle3') && Boolean.parseBoolean(use_forgegradle3)
+}
+
+// Detects if GradleWorks should use Mixin.
+def isUsingMixin() {
+    return project.hasProperty('mixin_version')
+}
 
 // Buildscript setup (DO NOT EDIT!!!)
 buildscript {
@@ -25,7 +47,7 @@ buildscript {
     }
     dependencies {
         // Minecraft Forge ForgeGradle
-        if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        if (!(project.hasProperty('use_forgegradle3') && Boolean.parseBoolean(use_forgegradle3))) {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
         } else {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -37,17 +59,18 @@ buildscript {
 }
 
 ext {
-    timeOfExecution = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    // Gets the current time for the jar manifest
+    timeOfExecution = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
 }
 
-println('GradleWorks for ForgeGradle '.concat(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? '3' : '4'))
+printf('GradleWorks for ForgeGradle %d%n', !isUsingFG3() ? 4 : 3)
 println('Written by Jonathing')
-println('Version 3.3.2')
+println('Version 3.4.0')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
 // MixinGradle - Adds mixin support to the development environment.
-if (project.hasProperty('mixin_version')) {
+if (isUsingMixin()) {
     if (!project.extensions.findByName('eclipse')) {
         println()
     }
@@ -61,21 +84,27 @@ apply plugin: 'signing'
 // Maven Publishing - Used to be able to publish to maven repositories.
 apply plugin: 'maven-publish'
 
-// Detects if the OS is macOS. Required for the workaround in genData.
-static def isOsx() {
-    def osProp = System.properties['os.name'].toLowerCase()
-    return osProp.contains('darwin') || osProp.contains('osx') || osProp.contains('mac')
-}; project.ext.isOsx = { return isOsx() }
+// Gets a file from a parent directory and folder/file names
+def getFile(File parent, String... paths) {
+    StringBuilder builder = new StringBuilder()
+    builder.append(parent)
+    for (String path : paths) {
+        builder.append('/')
+        builder.append(path)
+    }
+
+    return file(builder.toString().replace('/', isWindows() ? '\\' : '/'))
+}
 
 // Get the mod version from gradle.properties
-version = "${mod_version}"
+version = mod_version
 // Get the mod group from gradle.properties
-group = "${mod_group}"
+group = mod_group
 // Get the archives base name from the mod id and the Minecraft version.
-archivesBaseName = "${mod_id}-${mc_version}"
+archivesBaseName = String.format('%s-%s', mod_id, mc_version)
 
 // this variable points to where the latest built file is placed for usage in publish.gradle
-project.ext.reobfFile = file("build/libs/${archivesBaseName}-${version}.jar".toString())
+project.ext.reobfFile = getFile(buildDir, 'libs', "${archivesBaseName}-${version}.jar".toString())
 
 // This file contains additional instructions for signing builds of this mod (see the file for more details).
 apply from: 'signing.gradle'
@@ -83,7 +112,7 @@ apply from: 'signing.gradle'
 apply from: 'publish.gradle'
 
 // Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
-if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+if (!isUsingFG3()) {
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 } else {
     sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
@@ -93,28 +122,29 @@ if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString(
 // It is printed on every build, so make sure you double check!
 println()
 println('Java Information')
-println('- Java: ' + System.getProperty('java.version'))
-println('- JVM: ' + System.getProperty('java.vm.version') + ' (' + System.getProperty('java.vendor') + ')')
-println('- Arch: ' + System.getProperty('os.arch'))
+printf('- Java: %s%n', System.getProperty('java.version'))
+printf('- JVM: %s (%s)%n', System.getProperty('java.vm.version'), System.getProperty('java.vendor'))
+printf('- Arch: %s%n', System.getProperty('os.arch'))
 println()
 println('Minecraft Information')
-println('- Minecraft: ' + "${mc_version}".toString())
-println('- Minecraft Forge: ' + "${forge_version}".toString())
-println('- Mappings: ' + "${mappings_version} ${mappings_channel}".toString())
+printf('- Minecraft: %s%n', mc_version)
+printf('- Minecraft Forge: %s%n', forge_version)
+printf('- Mappings: %s %s%n', mappings_version, mappings_channel)
 println()
 println('Mod Information')
-println('- ID: ' + "${mod_id}".toString())
-println('- Name: ' + "${mod_name}".toString())
-println('- Version: ' + "${version}".toString())
+printf('- ID: %s%n', mod_id)
+printf('- Name: %s%n', mod_name)
+printf('- Version: %s%n', version)
+println()
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
     // CurseMaven
     maven {
-        url "https://www.cursemaven.com"
-        if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
+        url 'https://www.cursemaven.com'
+        if (GradleVersion.current().getVersion().split('\\.').head().toInteger() >= 5) {
             content {
-                includeGroup "curse.maven"
+                includeGroup 'curse.maven'
             }
         }
     }
@@ -123,38 +153,38 @@ repositories {
 // Minecraft setup
 minecraft {
     // Mappings to use for the project. See default MDK for mappings instructions.
-    mappings channel: "${mappings_channel}".toString(), version: "${mappings_version}".toString()
+    mappings channel: mappings_channel, version: mappings_version
 
-    // Access Transformer (commented out by default)
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // Access Transformer
+    accessTransformer = getFile(projectDir, 'src', 'main', 'resources', 'META-INF', 'accesstransformer.cfg')
 
     // Run configurations
     runs {
         // Client run configuration
         client {
             // The directory for Minecraft to run in
-            workingDirectory project.file('run')
+            workingDirectory getFile(projectDir, 'run')
 
-            // Enable mixins if installed (comment out if using a MixinConnector)
-            if (project.hasProperty('mixin_version')) {
+            // Enable mixins if installed
+            if (isUsingMixin()) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
 
             // Remaps refmaps to workspace mappings for mixin
             property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
+            property 'mixin.env.refMapRemappingFile', getFile(buildDir, 'createSrgToMcp', 'output.srg')
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Console logging level (debug by default, change to info if it's too much)
-            property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by info, change to debug if you need debug logging)
+            property 'forge.logging.console.level', 'info'
 
             // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
             property "${mod_id}.iside".toString(), 'true'
 
             // Add the mod's main source set to the total mods in the run configuration
-            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            ModConfig modConfig = new ModConfig(project, mod_id)
             modConfig.source(sourceSets.main)
             mods.add(modConfig)
         }
@@ -162,10 +192,10 @@ minecraft {
         // Server run configuration
         server {
             // The directory for Minecraft to run in
-            workingDirectory project.file('run')
+            workingDirectory getFile(projectDir, 'run')
 
-            // Enable mixins if installed (comment out if using a MixinConnector)
-            if (project.hasProperty('mixin_version')) {
+            // Enable mixins if installed
+            if (isUsingMixin()) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
 
@@ -174,19 +204,19 @@ minecraft {
 
             // Remaps refmaps to workspace mappings for mixin
             property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
+            property 'mixin.env.refMapRemappingFile', getFile(buildDir, 'createSrgToMcp', 'output.srg')
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Console logging level (debug by default, change to info if it's too much)
-            property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by info, change to debug if you need debug logging)
+            property 'forge.logging.console.level', 'info'
 
             // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
             property "${mod_id}.iside".toString(), 'true'
 
             // Add the mod's main source set to the total mods in the run configuration
-            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            ModConfig modConfig = new ModConfig(project, mod_id)
             modConfig.source(sourceSets.main)
             mods.add(modConfig)
         }
@@ -194,25 +224,25 @@ minecraft {
         // Data run configuration
         data {
             // The directory for Minecraft to run in
-            workingDirectory project.file('run')
+            workingDirectory getFile(projectDir, 'run')
 
-            // Enable mixins if installed (comment out if using a MixinConnector)
-            if (project.hasProperty('mixin_version')) {
+            // Enable mixins if installed
+            if (isUsingMixin()) {
                 arg "-mixin.config=${mod_id}.mixins.json".toString()
             }
 
             // Additional arguments exclusive to data generation (do NOT change these unless necessary)
-            args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', getFile(projectDir, 'src', 'generated', 'resources'), '--existing', getFile(projectDir, 'src', 'main', 'resources')
 
             // Remaps refmaps to workspace mappings for mixin
             property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
+            property 'mixin.env.refMapRemappingFile', getFile(buildDir, 'createSrgToMcp', 'output.srg')
 
             // Logging markers for Forge. See default MDK for instructions
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Console logging level (debug by default, change to info if it's too much)
-            property 'forge.logging.console.level', 'debug'
+            // Console logging level (debug by info, change to debug if you need debug logging)
+            property 'forge.logging.console.level', 'info'
 
             // Tells the mod if it is running in an IDE (must be configured in your project, but not required)
             property "${mod_id}.iside".toString(), 'true'
@@ -222,12 +252,12 @@ minecraft {
 
             // Workaround for https://github.com/MinecraftForge/ForgeGradle/issues/690
             // Written by Shadew
-            if (project.ext.isOsx()) {
+            if (isMacOS()) {
                 jvmArg('-XstartOnFirstThread')
             }
 
             // Add the mod's main source set to the total mods in the run configuration
-            ModConfig modConfig = new ModConfig(project, "${mod_id}".toString())
+            ModConfig modConfig = new ModConfig(project, mod_id)
             modConfig.source(sourceSets.main)
             mods.add(modConfig)
         }
@@ -235,12 +265,12 @@ minecraft {
 }
 
 // Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources { srcDir getFile(projectDir, 'src', 'generated', 'resources') }
 
 // Ensure the reference map is included in the source sets
-if (project.hasProperty('mixin_version')) {
+if (isUsingMixin()) {
     mixin {
-        add sourceSets.main, "${mod_id}.refmap.json"
+        add sourceSets.main, "${mod_id}.refmap.json".toString()
     }
 }
 
@@ -250,8 +280,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
     // Mixin processor
-    if (!(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true')) {
-        if (project.hasProperty('mixin_version')) {
+    if (!isUsingFG3()) {
+        if (isUsingMixin()) {
             annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
         }
     }
@@ -265,28 +295,26 @@ dependencies {
 // Attributes to include in the built jar file
 jar {
     manifest {
-        if (project.hasProperty('mixin_version')) {
+        if (isUsingMixin()) {
             attributes([
-                    'Specification-Title'     : "${mod_id}".toString(),
-                    'Specification-Vendor'    : "${mod_author}".toString(),
-                    'Specification-Version'   : "1",
+                    'Specification-Title'     : mod_id,
+                    'Specification-Vendor'    : mod_author,
+                    'Specification-Version'   : '1',
                     'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? "${version}".toString() : "${archiveVersion.getOrNull()}".toString(),
-                    'Implementation-Vendor'   : "${mod_author}".toString(),
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Implementation-Version'  : !isUsingFG3() ? archiveVersion.getOrElse(version) : version,
+                    'Implementation-Vendor'   : mod_author,
+                    'Implementation-Timestamp': project.ext.timeOfExecution,
                     'MixinConfigs'            : "${mod_id}.mixins.json".toString()
-                    // If you prefer to use a MixinConnector, feel free to do so; remember to uncomment the specified lines
-                    //'MixinConnector'          : 'your.package.here.MixinConnector'
             ])
         } else {
             attributes([
-                    'Specification-Title'     : "${mod_id}".toString(),
-                    'Specification-Vendor'    : "${mod_author}".toString(),
-                    'Specification-Version'   : "1",
+                    'Specification-Title'     : mod_id,
+                    'Specification-Vendor'    : mod_author,
+                    'Specification-Version'   : '1',
                     'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? "${version}".toString() : "${archiveVersion.getOrNull()}".toString(),
-                    'Implementation-Vendor'   : "${mod_author}".toString(),
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                    'Implementation-Version'  : !isUsingFG3() ? archiveVersion.getOrElse(version) : version,
+                    'Implementation-Vendor'   : mod_author,
+                    'Implementation-Timestamp': project.ext.timeOfExecution
             ])
         }
     }
