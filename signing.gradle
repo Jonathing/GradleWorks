@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
- * Version 3.3.2
+ * Version 3.4.0
  *
  * This gradle file contains additional instructions for signing builds of this mod.
  */
@@ -10,10 +10,6 @@
 String getVariable(String key) {
     return rootProject.hasProperty(key) ? rootProject.property(key) : null
 }
-
-project.ext.canJarBeSigned = { return canJarBeSigned() }
-project.ext.getProjectFingerprint = { return getProjectFingerprint() }
-project.ext.sign = { File jar -> return sign(jar) }
 
 // Ensures that the signJar task will run on every build
 // REMINDER: the jar will not be signed if the mcKeyStore key in gradle.properties does not exist
@@ -58,6 +54,6 @@ def sign(File jar) {
 // Gradle task to sign the jar.
 task signJar(dependsOn: 'reobfJar') {
     doLast {
-        project.ext.sign(jar.archivePath)
+        sign(jar.getArchiveFile().get().asFile)
     }
 }
