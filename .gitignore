@@ -1,7 +1,8 @@
-*
+*/*
 !.gitignore
 !.gitattributes
 !*.md
 !LICENSE
-!gradle.properties
-!*.gradle
+!*/gradle.properties
+!*/*.gradle
+!*/.gitignore
