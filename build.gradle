@@ -156,7 +156,10 @@ minecraft {
     mappings channel: mappings_channel, version: mappings_version
 
     // Access Transformer
-    accessTransformer = getFile(projectDir, 'src', 'main', 'resources', 'META-INF', 'accesstransformer.cfg')
+    File atFile = getFile(projectDir, 'src', 'main', 'resources', 'META-INF', 'accesstransformer.cfg')
+    if (atFile.exists()) {
+        accessTransformer = atFile
+    }
 
     // Run configurations
     runs {
