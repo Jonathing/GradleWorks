@@ -45,7 +45,7 @@ def sign(File jar) {
                 verbose: true,
                 preservelastmodified: "true"
         )
-        println("Jar signed: ${jar}".toString())
+        printf('Jar signed: %s%n', jar)
     } else {
         println('No keystore property found, jar will not be signed')
     }

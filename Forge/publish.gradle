@@ -49,8 +49,8 @@ publishing {
     repositories {
         // Test Maven repository located in the "mcmodsrepo" folder
         maven {
-            name "TestMaven"
-            url "file:///${project.projectDir}/mcmodsrepo"
+            name 'TestMaven'
+            url "file:///${project.projectDir}/mcmodsrepo".toString()
         }
     }
 }
