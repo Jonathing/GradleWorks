@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 5
  * Written by Jonathing
- * Version 3.4.1
+ * Version 4.0.0-alpha.1
  *
  * This gradle file contains additional instructions for publishing builds of this mod to maven repositories.
  */
