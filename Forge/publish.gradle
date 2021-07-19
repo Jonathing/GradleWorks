@@ -1,5 +1,5 @@
 /*
- * GradleWorks for ForgeGradle 4/3
+ * GradleWorks for ForgeGradle 4
  * Written by Jonathing
  * Version 3.4.1
  *
@@ -8,22 +8,14 @@
 
 // shoves all of the sources in a jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-    if (!project.isUsingFG3()) {
-        archiveClassifier.set('sources')
-    } else {
-        classifier = 'sources'
-    }
+    archiveClassifier.set('sources')
 
     from sourceSets.main.allSource
 }
 
 // shoves all of the sources and deobf compiled classes in a jar
 task deobfJar(type: Jar, dependsOn: classes) {
-    if (!project.isUsingFG3()) {
-        archiveClassifier.set('deobf')
-    } else {
-        classifier = 'deobf'
-    }
+    archiveClassifier.set('deobf')
 
     from sourceSets.main.java.sourceDirectories
     from sourceSets.main.output
@@ -31,11 +23,7 @@ task deobfJar(type: Jar, dependsOn: classes) {
 
 // generates the javadocs and shoves them in a jar
 task javadocJar(type: Jar) {
-    if (!project.isUsingFG3()) {
-        archiveClassifier.set('javadoc')
-    } else {
-        classifier = 'javadoc'
-    }
+    archiveClassifier.set('javadoc')
 
     from javadoc
 }

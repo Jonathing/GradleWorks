@@ -1,5 +1,5 @@
 /*
- * GradleWorks for ForgeGradle 4/3
+ * GradleWorks for ForgeGradle 4
  * Written by Jonathing
  * Version 3.4.1
  *
@@ -9,7 +9,6 @@
  */
 
 import net.minecraftforge.gradle.common.util.ModConfig
-import org.gradle.util.GradleVersion
 
 // Detects if the OS is macOS.
 static boolean isMacOS() {
@@ -21,11 +20,6 @@ static boolean isMacOS() {
 static boolean isWindows() {
     def osProp = System.properties['os.name'].toLowerCase()
     return osProp.contains('windows')
-}
-
-// Detects if GradleWorks should use ForgeGradle 3.
-boolean isUsingFG3() {
-    return project.hasProperty('use_forgegradle3') && Boolean.parseBoolean(use_forgegradle3)
 }
 
 // Detects if GradleWorks should use Mixin.
@@ -47,11 +41,7 @@ buildscript {
     }
     dependencies {
         // Minecraft Forge ForgeGradle
-        if (!(project.hasProperty('use_forgegradle3') && Boolean.parseBoolean(use_forgegradle3))) {
-            classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        } else {
-            classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        }
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
 
         // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
@@ -63,7 +53,7 @@ ext {
     timeOfExecution = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
 }
 
-printf('GradleWorks for ForgeGradle %d%n', !isUsingFG3() ? 4 : 3)
+println('GradleWorks for ForgeGradle 4')
 println('Written by Jonathing')
 println('Version 3.4.1')
 
@@ -112,11 +102,7 @@ apply from: 'signing.gradle'
 apply from: 'publish.gradle'
 
 // Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
-if (!isUsingFG3()) {
-    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-} else {
-    sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 // This section prints out the Java, Minecraft, and Mod info just to double check all the values are correct.
 // It is printed on every build, so make sure you double check!
@@ -142,10 +128,8 @@ repositories {
     // CurseMaven
     maven {
         url 'https://www.cursemaven.com'
-        if (GradleVersion.current().getVersion().split('\\.').head().toInteger() >= 5) {
-            content {
-                includeGroup 'curse.maven'
-            }
+        content {
+            includeGroup 'curse.maven'
         }
     }
 }
@@ -283,10 +267,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
     // Mixin processor
-    if (!isUsingFG3()) {
-        if (isUsingMixin()) {
-            annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
-        }
+    if (isUsingMixin()) {
+        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
     }
 
     // Lazy DataFixerUpper(LazyDFU) [FORGE]
@@ -304,7 +286,7 @@ jar {
                     'Specification-Vendor'    : mod_author,
                     'Specification-Version'   : '1',
                     'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : !isUsingFG3() ? archiveVersion.getOrElse(version) : version,
+                    'Implementation-Version'  : archiveVersion.getOrElse(version),
                     'Implementation-Vendor'   : mod_author,
                     'Implementation-Timestamp': project.ext.timeOfExecution,
                     'MixinConfigs'            : "${mod_id}.mixins.json".toString()
@@ -315,7 +297,7 @@ jar {
                     'Specification-Vendor'    : mod_author,
                     'Specification-Version'   : '1',
                     'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : !isUsingFG3() ? archiveVersion.getOrElse(version) : version,
+                    'Implementation-Version'  : archiveVersion.getOrElse(version),
                     'Implementation-Vendor'   : mod_author,
                     'Implementation-Timestamp': project.ext.timeOfExecution
             ])
