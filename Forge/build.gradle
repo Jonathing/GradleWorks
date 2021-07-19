@@ -1,5 +1,5 @@
 /*
- * GradleWorks for ForgeGradle 4
+ * GradleWorks for ForgeGradle 5
  * Written by Jonathing
  * Version 3.4.1
  *
@@ -41,7 +41,7 @@ buildscript {
     }
     dependencies {
         // Minecraft Forge ForgeGradle
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
 
         // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
@@ -53,7 +53,7 @@ ext {
     timeOfExecution = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
 }
 
-println('GradleWorks for ForgeGradle 4')
+println('GradleWorks for ForgeGradle 5')
 println('Written by Jonathing')
 println('Version 3.4.1')
 
@@ -122,6 +122,13 @@ printf('- ID: %s%n', mod_id)
 printf('- Name: %s%n', mod_name)
 printf('- Version: %s%n', version)
 println()
+
+if (isUsingMixin()) {
+    println('ForgeGradle 5 currently does not function with MixinGradle.')
+    println('You may not be able to build or run the game.')
+    println('If you\'d like to disable mixin, comment out the mixin_version property in gradle.properties.')
+    println()
+}
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
