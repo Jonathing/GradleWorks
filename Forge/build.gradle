@@ -30,6 +30,9 @@ boolean isUsingMixin() {
 // Buildscript setup (DO NOT EDIT!!!)
 buildscript {
     repositories {
+        // ForgeGradle 5 + MixinGradle forks and workarounds
+        maven { url 'https://maven.moddinglegacy.com/repository/fg5/' }
+
         // Minecraft Forge Maven
         maven { url 'https://maven.minecraftforge.net' }
 
@@ -44,7 +47,7 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
 
         // SpongePowered MixinGradle
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-FG5-SNAPSHOT'
     }
 }
 
@@ -124,14 +127,19 @@ printf('- Version: %s%n', version)
 println()
 
 if (isUsingMixin()) {
-    println('ForgeGradle 5 currently does not function with MixinGradle.')
-    println('You may not be able to build or run the game.')
+    println('MixinGradle currently does not function properly with ForgeGradle 5.')
+    println('You will most likely be able to run the game in your IDE, but any built jars will not function.')
     println('If you\'d like to disable mixin, comment out the mixin_version property in gradle.properties.')
     println()
 }
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
+    // SpongePowered Maven
+    maven {
+        url 'https://repo.spongepowered.org/maven'
+    }
+
     // CurseMaven
     maven {
         url 'https://www.cursemaven.com'
@@ -275,6 +283,7 @@ dependencies {
 
     // Mixin processor
     if (isUsingMixin()) {
+        implementation "org.spongepowered:mixin:${mixin_version}".toString() // TODO remove this once MixinGradle and 0.8.3 are finished.
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
     }
 
