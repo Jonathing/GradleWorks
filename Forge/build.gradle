@@ -104,8 +104,8 @@ apply from: 'signing.gradle'
 // This file contains additional instructions for publishing builds of this mod to maven repositories (commented out by default, see the file for more details).
 apply from: 'publish.gradle'
 
-// Ensure that the IDE knows that this project is for Java 8 (or at the least, SDK level 8) and nothing else.
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+// Ensure that the IDE knows that this project is for Java 16 (or at the least, SDK level 16) and nothing else.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 // This section prints out the Java, Minecraft, and Mod info just to double check all the values are correct.
 // It is printed on every build, so make sure you double check!
@@ -135,6 +135,12 @@ if (isUsingMixin()) {
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
+    // FG5 Experimental Repo
+    maven {
+        name 'ModdingLegacyMaven'
+        url 'https://maven.moddinglegacy.com/repository/fg5/'
+    }
+
     // SpongePowered Maven
     maven {
         url 'https://repo.spongepowered.org/maven'
@@ -283,7 +289,9 @@ dependencies {
 
     // Mixin processor
     if (isUsingMixin()) {
-        implementation "org.spongepowered:mixin:${mixin_version}".toString() // TODO remove this once MixinGradle and 0.8.3 are finished.
+        // TODO Remove this once Mixin is back in Forge
+        implementation "org.spongepowered:mixin:${mixin_version}".toString()
+
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor".toString()
     }
 
