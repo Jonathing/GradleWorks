@@ -313,8 +313,9 @@ dependencies {
     }
 
     // Lazy DataFixerUpper(LazyDFU) [FORGE]
+    // TODO When LazyDFU updates and Forge fixes runtime dependencies, re-add this.
     if (project.hasProperty('lazydfu_file_id')) {
-        runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
+//        runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
     }
 }
 
