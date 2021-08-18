@@ -53,6 +53,9 @@ buildscript {
         // SpongePowered Maven
         maven { url 'https://repo.spongepowered.org/maven' }
 
+        // ParchmentMC Maven
+        maven { url 'https://maven.parchmentmc.org' }
+
         // Maven Central
         mavenCentral()
     }
@@ -62,12 +65,10 @@ buildscript {
 
         // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
 
-ext {
-    // Gets the current time for the jar manifest
-    timeOfExecution = new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
+        // ParchmentMC Librarian
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+', changing: true
+    }
 }
 
 println('GradleWorks for ForgeGradle 5')
@@ -76,13 +77,15 @@ println('Version 4.0.0-alpha.3')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
-// MixinGradle - Adds mixin support to the development environment.
+// MixinGradle - Adds Mixin support to the development environment.
 if (isUsingMixin()) {
     if (!project.extensions.findByName('eclipse')) {
         println()
     }
     apply plugin: 'org.spongepowered.mixin'
 }
+// Librarian - Adds Parchment support to the development environment.
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 // Eclipse - Adds compatibility for Eclipse workspaces.
 apply plugin: 'eclipse'
@@ -339,7 +342,7 @@ jar {
                     'Implementation-Title'    : project.name,
                     'Implementation-Version'  : archiveVersion.getOrElse(version),
                     'Implementation-Vendor'   : mod_author,
-                    'Implementation-Timestamp': project.ext.timeOfExecution,
+                    'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ'),
                     'MixinConfigs'            : "${mod_id}.mixins.json".toString()
             ])
         } else {
@@ -350,7 +353,7 @@ jar {
                     'Implementation-Title'    : project.name,
                     'Implementation-Version'  : archiveVersion.getOrElse(version),
                     'Implementation-Vendor'   : mod_author,
-                    'Implementation-Timestamp': project.ext.timeOfExecution
+                    'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
             ])
         }
     }
