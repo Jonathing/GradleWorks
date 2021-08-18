@@ -1,7 +1,7 @@
 /*
- * GradleWorks for ForgeGradle 5
+ * GradleWorks for ForgeGradle 4
  * Written by Jonathing
- * Version 4.0.0-alpha.3
+ * Version 4.0.0-alpha.4
  *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
@@ -58,9 +58,9 @@ buildscript {
     }
 }
 
-println('GradleWorks for ForgeGradle 5')
+println('GradleWorks for ForgeGradle 4')
 println('Written by Jonathing')
-println('Version 4.0.0-alpha.3')
+println('Version 4.0.0-alpha.4')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
@@ -127,11 +127,6 @@ printf('- ID: %s%n', mod_id)
 printf('- Name: %s%n', mod_name)
 printf('- Version: %s%n', version)
 println()
-
-if (project.hasProperty('mixin_version')) {
-    println('Mixin currently does not function properly with ForgeGradle 5 or Minecraft 1.17.x. It has been auto-disabled for now. Once Mixin has been updated to support the new modlauncher, GradleWorks will re-allow using Mixin in a future update.')
-    println()
-}
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
