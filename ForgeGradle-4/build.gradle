@@ -24,9 +24,7 @@ static boolean isWindows() {
 
 // Detects if GradleWorks should use Mixin.
 boolean isUsingMixin() {
-    // TODO Re-add mixin functionality once 0.8.4 is ready and in Forge.
-//    return project.hasProperty('mixin_version')
-    return false
+    return project.hasProperty('mixin_version')
 }
 
 // Whether or not Gradle should ignore all files in any "mixin" java package and the "*.mixins.json" file.
@@ -39,11 +37,6 @@ boolean ignoreCoremodFiles() {
     return project.hasProperty('ignore_coremod_files') && Boolean.parseBoolean(ignore_coremod_files)
 }
 
-// Whether or not Gradle should ignore all files in any "mixin" java package and the "*.mixins.json" file.
-boolean usingFMLOnly() {
-    return project.hasProperty('use_fmlonly') && Boolean.parseBoolean(use_fmlonly)
-}
-
 // Buildscript setup (DO NOT EDIT!!!)
 buildscript {
     repositories {
@@ -53,21 +46,15 @@ buildscript {
         // SpongePowered Maven
         maven { url 'https://repo.spongepowered.org/maven' }
 
-        // ParchmentMC Maven
-        maven { url 'https://maven.parchmentmc.org' }
-
         // Maven Central
         mavenCentral()
     }
     dependencies {
         // Minecraft Forge ForgeGradle
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
 
         // SpongePowered MixinGradle
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-
-        // ParchmentMC Librarian
-        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+', changing: true
     }
 }
 
@@ -84,8 +71,6 @@ if (isUsingMixin()) {
     }
     apply plugin: 'org.spongepowered.mixin'
 }
-// Librarian - Adds Parchment support to the development environment.
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 // Eclipse - Adds compatibility for Eclipse workspaces.
 apply plugin: 'eclipse'
@@ -122,7 +107,7 @@ apply from: 'signing.gradle'
 apply from: 'publish.gradle'
 
 // Ensure that the IDE knows that this project is for Java 16 (or at the least, SDK level 16) and nothing else.
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 // This section prints out the Java, Minecraft, and Mod info just to double check all the values are correct.
 // It is printed on every build, so make sure you double check!
@@ -308,11 +293,7 @@ if (isUsingMixin()) {
 // Dependencies to use in this project
 dependencies {
     // Minecraft Forge
-    String toolchain = 'forge'
-    if (usingFMLOnly()) {
-        toolchain = 'fmlonly'
-    }
-    minecraft "net.minecraftforge:${toolchain}:${mc_version}-${forge_version}".toString()
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}".toString()
 
     // Mixin processor
     if (isUsingMixin()) {
@@ -320,9 +301,8 @@ dependencies {
     }
 
     // Lazy DataFixerUpper(LazyDFU) [FORGE]
-    // TODO When LazyDFU updates and Forge fixes runtime dependencies, re-add this.
     if (project.hasProperty('lazydfu_file_id')) {
-//        runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
+        runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
     }
 }
 
